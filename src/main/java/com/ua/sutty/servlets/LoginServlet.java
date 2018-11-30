@@ -31,20 +31,30 @@ public class LoginServlet extends HttpServlet {
         loadProperties.loadProperties();
         JdbcUserDao jdbcUserDao = new JdbcUserDao(new DataSource().getBasicDataSourceTest());
         User user = jdbcUserDao.findByLogin(login);
-        if (user == null) {
-            throw new NullPointerException();
+        System.out.println(user);
+        System.out.println(1);
+        if (user.getLogin() == null) {
+            req.setAttribute("errorMessage", "incorrect");
+            doGet(req, resp);
+            return;
         }
         if (user.getPassword().equals(password)) {
             HttpSession session = req.getSession();
-            req.setAttribute("login", user.getLogin());
+//            req.setAttribute("userLogin", user.getLogin());
             session.setAttribute("loginedUser", user);
+            System.out.println(req.getSession().getAttribute("loginedUser"));
+            resp.sendRedirect("/home");
+        }else {
+            req.setAttribute("errorMessage", "incorrect");
+            doGet(req, resp);
         }
-        if (user.getRoleId() == 1) {
-            resp.sendRedirect("/admin");
-        }
-        if (user.getRoleId() == 2) {
-            resp.sendRedirect("/user");
-        }
+
+//        if (user.getRoleId() == 1) {
+//            resp.sendRedirect("/admin");
+//        }
+//        if (user.getRoleId() == 2) {
+//            resp.sendRedirect("/user");
+//        }
     }
 
 }

@@ -1,13 +1,12 @@
 <%--
   Created by IntelliJ IDEA.
   User: suttyread
-  Date: 28.11.18
-  Time: 18:02
+  Date: 30.11.18
+  Time: 16:08
   To change this template use File | Settings | File Templates.
 --%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ taglib uri="http://rborulchenko.com/tags" prefix="myTags" %>
+<%@ taglib prefix = "c" uri = "http://java.sun.com/jsp/jstl/core" %>
 <html>
 <head>
     <title>Title</title>
@@ -16,20 +15,7 @@
 </head>
 <body>
 <%@ include file = "header.jsp" %>
-
-Hello, admin
-
-<a href="/add">Add new User</a>
-
-<div class="col-sm-offset-3 col-sm-6 err-message">
-    <c:if test="${successfullDelete == 1}">
-        <div class="alert alert-success" role="alert">
-            User was successfully delete!
-        </div>
-    </c:if>
-</div>
-
-<myTags:printTable userList="${users}"/>
+Access Denied
 
 </body>
 </html>

@@ -1,11 +1,5 @@
-<!doctype html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Document</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
-</head>
-<body>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <a class="navbar-brand" href="/">Servlet and Jsp</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
@@ -16,7 +10,7 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
             <li class="nav-item">
-                <a class="nav-link" href="/main">Main</a>
+                <a class="nav-link" href="/">Main</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="/home">Home</a>
@@ -30,11 +24,10 @@
         </ul>
 
         <div class="navbar-text mr-3">${name}</div>
-        ${login},
-        <a href="/logout">Logout</a>
+        <c:if test="${loginedUser != null}">
+            ${userLogin},
+            <a href="/logout"> Logout</a>
+        </c:if>
+
     </div>
 </nav>
-<a href="#">Add new User</a>
-
-</body>
-</html>

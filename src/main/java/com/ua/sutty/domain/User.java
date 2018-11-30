@@ -1,6 +1,5 @@
 package com.ua.sutty.domain;
 
-
 import java.sql.Date;
 
 public class User {

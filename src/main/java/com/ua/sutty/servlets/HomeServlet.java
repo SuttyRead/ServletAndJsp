@@ -1,6 +1,9 @@
 package com.ua.sutty.servlets;
 
+import com.ua.sutty.domain.Role;
 import com.ua.sutty.domain.User;
+import com.ua.sutty.repository.impl.JdbcUserDao;
+import com.ua.sutty.utils.DataSource;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -9,6 +12,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 @WebServlet("/home")
 public class HomeServlet extends HttpServlet {
@@ -18,8 +23,16 @@ public class HomeServlet extends HttpServlet {
         HttpSession session = req.getSession();
         User loginedUser = (User) req.getSession().getAttribute("loginedUser");
         System.out.println(loginedUser.getLogin());
-        req.setAttribute("login", loginedUser.getLogin());
+//        req.setAttribute("userLogin", loginedUser.getLogin());
         if (loginedUser.getRoleId() == 1) {
+            JdbcUserDao jdbcUserDao = new JdbcUserDao(new DataSource().getBasicDataSourceTest());
+            List<Role> roles = new ArrayList<>();
+            Role role1 = new Role(1L, "ADMIN");
+            Role role2 = new Role(2L, "USER");
+            roles.add(role1);
+            roles.add(role2);
+            req.setAttribute("roles", roles);
+            req.setAttribute("users", jdbcUserDao.findAll());
             req.getServletContext().getRequestDispatcher("/jsp/admin-home.jsp").forward(req, resp);
         }
         if (loginedUser.getRoleId() == 2) {

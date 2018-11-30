@@ -9,7 +9,8 @@ public class SecurityConfig {
 
     // String: Role
     // List<String>: urlPatterns.
-    private static final Map<String, List<String>> mapConfig = new HashMap<String, List<String>>();
+    private static final Map<String, List<String>> mapConfig = new HashMap<>();
+    private static final List<String> url = new ArrayList<>();
 
     static {
         init();

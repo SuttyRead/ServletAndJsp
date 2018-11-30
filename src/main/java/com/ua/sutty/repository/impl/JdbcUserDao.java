@@ -1,6 +1,7 @@
 package com.ua.sutty.repository.impl;
 
 import com.ua.sutty.domain.User;
+import com.ua.sutty.form.UserForm;
 import com.ua.sutty.repository.AbstractJdbcDao;
 import com.ua.sutty.repository.UserDao;
 import org.apache.commons.dbcp2.BasicDataSource;
@@ -24,6 +25,8 @@ public class JdbcUserDao extends AbstractJdbcDao implements UserDao {
     private static final String DELETE_ADMINISTRATOR_BY_ID = String.format("DELETE FROM user WHERE %s = ?;", User.ID);
 
     private static final String GET_USER_BY_LOGIN = "SELECT * FROM user WHERE login = ?";
+
+    private static final String GET_USER_BY_ID = "SELECT * FROM user WHERE id = ?";
 
     private static final String GET_USER_BY_EMAIL = "SELECT * FROM user WHERE email = ?";
 
@@ -183,6 +186,7 @@ public class JdbcUserDao extends AbstractJdbcDao implements UserDao {
         Connection connection = null;
         PreparedStatement pst = null;
         ResultSet rs = null;
+
         try {
             connection = createConnection();
             pst = connection.prepareStatement(GET_USER_BY_LOGIN);
@@ -200,6 +204,46 @@ public class JdbcUserDao extends AbstractJdbcDao implements UserDao {
             }
             connection.commit();
             LOGGER.trace("Find user by login");
+        } catch (SQLException e) {
+            LOGGER.error("Error in time execute query", e);
+            rollBackTransactional(connection);
+            throw new RuntimeException(e);
+        } finally {
+            closeResultSet(rs);
+            closePreparedStatement(pst);
+            closeConnection(connection);
+        }
+        return user;
+    }
+
+    @Override
+    public User findById(Long id) {
+        if (id == null) {
+            LOGGER.error("Login == null", new NullPointerException());
+            throw new NullPointerException();
+        }
+        User user = new User();
+        Connection connection = null;
+        PreparedStatement pst = null;
+        ResultSet rs = null;
+
+        try {
+            connection = createConnection();
+            pst = connection.prepareStatement(GET_USER_BY_ID);
+            pst.setLong(1, id);
+            rs = pst.executeQuery();
+            while (rs.next()) {
+                user.setId(rs.getLong(User.ID));
+                user.setLogin(rs.getString(User.LOGIN));
+                user.setPassword(rs.getString(User.PASSWORD));
+                user.setEmail(rs.getString(User.EMAIL));
+                user.setFirstName(rs.getString(User.FIRST_NAME));
+                user.setLastName(rs.getString(User.LAST_NAME));
+                user.setBirthday(rs.getDate(User.BIRTHDAY));
+                user.setRoleId(rs.getLong(User.ROLE_ID));
+            }
+            connection.commit();
+            LOGGER.trace("Find user by id");
         } catch (SQLException e) {
             LOGGER.error("Error in time execute query", e);
             rollBackTransactional(connection);
@@ -249,6 +293,41 @@ public class JdbcUserDao extends AbstractJdbcDao implements UserDao {
             closeConnection(connection);
         }
         return user;
+    }
+
+    @Override
+    public UserForm findByLoginWithoutExcessParam(String login) {
+        if (login == null) {
+            LOGGER.error("Login == null", new NullPointerException());
+            throw new NullPointerException();
+        }
+        UserForm userForm = new UserForm();
+        Connection connection = null;
+        PreparedStatement pst = null;
+        ResultSet rs = null;
+
+        try {
+            connection = createConnection();
+            pst = connection.prepareStatement(GET_USER_BY_LOGIN);
+            pst.setString(1, login);
+            rs = pst.executeQuery();
+            while (rs.next()) {
+                userForm.setLogin(rs.getString(User.LOGIN));
+                userForm.setPassword(rs.getString(User.PASSWORD));
+                userForm.setRoleId(rs.getLong(User.ROLE_ID));
+            }
+            connection.commit();
+            LOGGER.trace("Find user by login");
+        } catch (SQLException e) {
+            LOGGER.error("Error in time execute query", e);
+            rollBackTransactional(connection);
+            throw new RuntimeException(e);
+        } finally {
+            closeResultSet(rs);
+            closePreparedStatement(pst);
+            closeConnection(connection);
+        }
+        return userForm;
     }
 
     private synchronized void rollBackTransactional(Connection connection) {

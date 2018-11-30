@@ -11,10 +11,9 @@ CREATE TABLE IF NOT EXISTS user(id BIGINT primary key AUTO_INCREMENT, login varc
 -- INSERT INTO role (name) VALUES ("USER");
 -- INSERT INTO user (login, password, role_id) VALUES ("admin", "admin", 1);
 -- INSERT INTO user (login, password, role_id) VALUES ("user", "user", 2);
-
-INSERT INTO "PUBLIC"."ROLE" ("NAME") VALUES ('ADMIN');
-INSERT INTO "PUBLIC"."ROLE" ("NAME") VALUES ('USER');
-INSERT INTO "PUBLIC"."USER" ("LOGIN", "PASSWORD", "ROLE_ID") VALUES ('admin', 'admin', 1);
+-- INSERT INTO "PUBLIC"."ROLE" ("NAME") VALUES ('ADMIN');
+-- INSERT INTO "PUBLIC"."ROLE" ("NAME") VALUES ('USER');
+-- INSERT INTO "PUBLIC"."USER" ("LOGIN", "PASSWORD", "ROLE_ID") VALUES ('admin', 'admin', 1);
+-- INSERT INTO "PUBLIC"."USER" ("LOGIN", "PASSWORD", "ROLE_ID") VALUES ('user', 'user', 2);
 -- INSERT INTO "PUBLIC"."USER" ("LOGIN", "PASSWORD", "EMAIL", "FIRST_NAME", "LAST_NAME", "BIRTHDAY", "ROLE_ID") VALUES ('admin', 'admin', 'NULL', 'NULL', 'NULL', 'NULL', NULL);
-INSERT INTO "PUBLIC"."USER" ("LOGIN", "PASSWORD", "ROLE_ID") VALUES ('user', 'user', 2);
 -- INSERT INTO "PUBLIC"."USER" ("LOGIN", "PASSWORD", "EMAIL", "FIRST_NAME", "LAST_NAME", "BIRTHDAY", "ROLE_ID") VALUES ('user', 'user', 'NULL', 'NULL', 'NULL', 'NULL', NULL);

@@ -27,6 +27,7 @@ public class JdbcRoleDao extends AbstractJdbcDao implements RoleDao {
 
     private static final String GET_ROLE_BY_NAME = "SELECT * FROM role WHERE name = ?";
 
+
     private static final String UPDATE_ROLE = String.format("UPDATE role SET %s = ?" +
         "WHERE id = ?", Role.NAME);
 

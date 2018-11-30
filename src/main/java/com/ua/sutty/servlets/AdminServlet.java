@@ -3,7 +3,6 @@ package com.ua.sutty.servlets;
 import com.ua.sutty.domain.Role;
 import com.ua.sutty.domain.User;
 import com.ua.sutty.repository.impl.JdbcUserDao;
-import com.ua.sutty.tag.PrintUsers;
 import com.ua.sutty.utils.DataSource;
 
 import javax.servlet.ServletException;
@@ -21,7 +20,7 @@ public class AdminServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         User loginedUser = (User) req.getSession().getAttribute("loginedUser");
-        req.setAttribute("login", loginedUser.getLogin());
+//        req.setAttribute("userLogin", loginedUser.getLogin());
         System.out.println(loginedUser);
         JdbcUserDao jdbcUserDao = new JdbcUserDao(new DataSource().getBasicDataSourceTest());
         List<Role> roles = new ArrayList<>();

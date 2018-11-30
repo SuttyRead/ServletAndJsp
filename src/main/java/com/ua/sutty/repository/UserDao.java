@@ -2,6 +2,7 @@ package com.ua.sutty.repository;
 
 
 import com.ua.sutty.domain.User;
+import com.ua.sutty.form.UserForm;
 
 import java.util.List;
 
@@ -18,5 +19,9 @@ public interface UserDao {
     User findByLogin(String login);
 
     User findByEmail(String email);
+
+    User findById(Long id);
+
+    UserForm findByLoginWithoutExcessParam(String login);
 
 }
