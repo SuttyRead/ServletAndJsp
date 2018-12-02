@@ -42,7 +42,6 @@
             <c:if test="${existLogin == 1}">
                 <div class="alert alert-danger" role="alert">
                    This login already exist!
-                    123
                 </div>
             </c:if>
         </div>
@@ -85,13 +84,13 @@
                    placeholder="Enter email" name="email"
                    value="${newUser.email}">
         </div>
-        <div class="col-sm-offset-3 col-sm-6 err-message">
-            <c:if test="${existEmail == 1}">
-                <div class="alert alert-danger" role="alert">
-                    This email already exist!
-                </div>
-            </c:if>
-        </div>
+        <%--<div class="col-sm-offset-3 col-sm-6 err-message">--%>
+            <%--<c:if test="${existEmail == 1}">--%>
+                <%--<div class="alert alert-danger" role="alert">--%>
+                    <%--This email already exist!--%>
+                <%--</div>--%>
+            <%--</c:if>--%>
+        <%--</div>--%>
     </div>
 
     <div class="form-group">

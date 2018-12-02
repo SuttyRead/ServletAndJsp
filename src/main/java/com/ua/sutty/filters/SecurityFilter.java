@@ -21,7 +21,9 @@ public class SecurityFilter implements Filter {
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
         AvailableUrl availableUrl = new AvailableUrl();
-        List<String> url = availableUrl.getUrl();
+        List<String> allUrl = availableUrl.getAllUrl();
+        List<String> urlForUser = availableUrl.getUrlForUser();
+        List<String> urlForGuest = availableUrl.getUrlForGuest();
 
         HttpServletRequest request = (HttpServletRequest) servletRequest;
         HttpServletResponse response = (HttpServletResponse) servletResponse;
@@ -29,8 +31,9 @@ public class SecurityFilter implements Filter {
         System.out.println(servletPath);
         User user = (User) request.getSession().getAttribute("loginedUser");
 
-        if (!url.contains(servletPath)){
+        if (!allUrl.contains(servletPath)) {
             request.getServletContext().getRequestDispatcher("/jsp/errorPage.jsp").forward(request, response);
+            return;
         }
 
 //        if (user.getLogin() == null){
@@ -56,24 +59,43 @@ public class SecurityFilter implements Filter {
 //            }
 //        }
 
-
-
-
-
-        if (user == null){
-            if (servletPath.equals("/edit") || servletPath.equals("/add") || servletPath.equals("/home") || servletPath.equals("/delete")){
+        if (user == null) {
+            if (!urlForGuest.contains(servletPath)) {
                 response.sendRedirect("/login");
-//                System.out.println(1);
+            } else {
+                filterChain.doFilter(request, response);
+            }
+        } else {
+            request.setAttribute("userLogin", user.getLogin());
+            if (servletPath.equals("/login")) {
+                response.sendRedirect("/home");
                 return;
             }
-            if (servletPath.equals("/")){
+            if (user.getRoleId() == 1) {
                 filterChain.doFilter(request, response);
+            } else {
+                if (!urlForUser.contains(servletPath)) {
+                    request.getServletContext().getRequestDispatcher("/jsp/accessDenied.jsp").forward(request, response);
+                } else {
+                    filterChain.doFilter(request, response);
+                }
             }
-            if (servletPath.equals("/login")){
-                filterChain.doFilter(request, response);
-            }
-//            filterChain.doFilter(request, response);
         }
+
+//        if (user == null){
+//            if (servletPath.equals("/edit") || servletPath.equals("/add") || servletPath.equals("/home") || servletPath.equals("/delete")){
+//                response.sendRedirect("/login");
+////                System.out.println(1);
+//                return;
+//            }
+//            if (servletPath.equals("/")){
+//                filterChain.doFilter(request, response);
+//            }
+//            if (servletPath.equals("/login")){
+//                filterChain.doFilter(request, response);
+//            }
+////            filterChain.doFilter(request, response);
+//        }
 
 //        if (user == null && !servletPath.equals("/") && !servletPath.equals("/login")){
 //            response.sendRedirect("/login");
@@ -85,51 +107,51 @@ public class SecurityFilter implements Filter {
 //            return;
 //        }
 
-        if (servletPath.equals("/login")){
-            if (user != null){
-                response.sendRedirect("/home");
-                return;
-            }
-        }
-
-        if (servletPath.equals("/edit")){
-            if (Objects.requireNonNull(user).getRoleId() == 1){
-                filterChain.doFilter(request, response);
-            }else {
-                request.getServletContext().getRequestDispatcher("/jsp/accessDenied.jsp").forward(request, response);
-            }
-        }
-
-        if (servletPath.equals("/add")){
-            if (Objects.requireNonNull(user).getRoleId() == 1){
-                filterChain.doFilter(request, response);
-            }else {
-                request.getServletContext().getRequestDispatcher("/jsp/accessDenied.jsp").forward(request, response);
-            }
-        }
-
-        if (servletPath.equals("/delete")){
-            if (Objects.requireNonNull(user).getRoleId() == 1){
-                filterChain.doFilter(request, response);
-            }else {
-                request.getServletContext().getRequestDispatcher("/jsp/accessDenied.jsp").forward(request, response);
-            }
-        }
+//        if (servletPath.equals("/login")) {
+//            if (user != null) {
+//                response.sendRedirect("/home");
+//                return;
+//            }
+//        }
+//
+//        if (servletPath.equals("/edit")) {
+//            if (Objects.requireNonNull(user).getRoleId() == 1) {
+//                filterChain.doFilter(request, response);
+//            } else {
+//                request.getServletContext().getRequestDispatcher("/jsp/accessDenied.jsp").forward(request, response);
+//            }
+//        }
+//
+//        if (servletPath.equals("/add")) {
+//            if (Objects.requireNonNull(user).getRoleId() == 1) {
+//                filterChain.doFilter(request, response);
+//            } else {
+//                request.getServletContext().getRequestDispatcher("/jsp/accessDenied.jsp").forward(request, response);
+//            }
+//        }
+//
+//        if (servletPath.equals("/delete")) {
+//            if (Objects.requireNonNull(user).getRoleId() == 1) {
+//                filterChain.doFilter(request, response);
+//            } else {
+//                request.getServletContext().getRequestDispatcher("/jsp/accessDenied.jsp").forward(request, response);
+//            }
+//        }
 
 //        if (servletPath.equals("/login")) {
 //            filterChain.doFilter(request, response);
 ////            return;
 //        }
 
-        if (user != null){
-            request.setAttribute("userLogin", user.getLogin());
-            filterChain.doFilter(request, response);
-        }
-
-        if (servletPath.equals("/")) {
-            filterChain.doFilter(request, response);
-
-        }
+//        if (user != null) {
+//            request.setAttribute("userLogin", user.getLogin());
+//            filterChain.doFilter(request, response);
+//        }
+//
+//        if (servletPath.equals("/")) {
+//            filterChain.doFilter(request, response);
+//
+//        }
 
 
 //        return;

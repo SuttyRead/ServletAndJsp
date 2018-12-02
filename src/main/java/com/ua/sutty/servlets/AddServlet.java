@@ -45,13 +45,13 @@ public class AddServlet extends HttpServlet {
         }else {
             req.setAttribute("existLogin", 2);
         }
-        if (jdbcUserDao.findByEmail(email).getEmail() != null){
-            req.setAttribute("existEmail", 1);
-            req.getServletContext().getRequestDispatcher("/jsp/add.jsp").forward(req, resp);
-            return;
-        }else {
-            req.setAttribute("existEmail", 2);
-        }
+//        if (jdbcUserDao.findByEmail(email).getEmail() != null){
+//            req.setAttribute("existEmail", 1);
+//            req.getServletContext().getRequestDispatcher("/jsp/add.jsp").forward(req, resp);
+//            return;
+//        }else {
+//            req.setAttribute("existEmail", 2);
+//        }
         User user = new User(login, password, email, firstName, lastName, Date.valueOf(birthday), Long.valueOf(role));
         jdbcUserDao.create(user);
         req.setAttribute("successfullAdd", 1);

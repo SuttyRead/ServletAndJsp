@@ -78,21 +78,22 @@ public class TablePrinterTag implements Tag {
 
                         .append("</td>\n<td>")
                         .append("<form action=\"/edit\"  method=\"get\">\n")
-                        .append("<input type=\"hidden\" name=\"userId\" value=")
-                        .append(user.getId()).append(">\n")
+                        .append("<input type=\"hidden\" name=\"userId\"")
+                        .append(">\n")
 //                        .append("<input type=\"hidden\" name=\"action\" >\n")
                         .append("<button type=\"submit\" class=\"btn btn-info ")
                         .append("\">Edit</button>\n")
                         .append("</form>")
-                        .append("<form action=\"/delete\" method=\"post\">")
 
+//                        .append("<button type = \"button\" class=\"btn btn-primary\" data - toggle = \"modal\"")
+//                        .append("data - target = \"#exampleModal\">")
+//                        .append("Delete")
+//                        .append("</button >")
 //                        .append("<a data-toggle=\"modal\" data-id=\"")
-                        .append("<input type=\"hidden\" name=\"userIdForDelete\" value=")
-                        .append(user.getId()).append(">\n")
-//                        .append("class=\"btn btn-outline-danger\" href=\"#openDeleteDialog\">Delete</a>")
-                        .append("<button type=\"submit\" class=\"btn btn-info ")
-                        .append("\">Delete</button>\n")
-                        .append("</form>\n")
+//                        .append(user.getId()).append("\"\n")
+//                        .append("class=\"open-DeleteDialog btn btn-danger active\" href=\"#exampleModal\">Delete</a>")
+                        .append("<a href=\"/delete?userIdForDelete=").append(user.getId()).append("\"")
+                        .append("onclick=\"return confirm('Are you sure?')\">Delete</a>")
                         .append("</td>\n").append("</tr>\n");
             }
             sb.append("</tbody>\n").append("</table>");
@@ -105,4 +106,5 @@ public class TablePrinterTag implements Tag {
         }
         return SKIP_BODY;
     }
+
 }

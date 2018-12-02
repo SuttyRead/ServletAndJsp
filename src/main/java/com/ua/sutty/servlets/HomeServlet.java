@@ -20,6 +20,7 @@ public class HomeServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+
         HttpSession session = req.getSession();
         User loginedUser = (User) req.getSession().getAttribute("loginedUser");
         System.out.println(loginedUser.getLogin());
@@ -33,11 +34,13 @@ public class HomeServlet extends HttpServlet {
             roles.add(role2);
             req.setAttribute("roles", roles);
             req.setAttribute("users", jdbcUserDao.findAll());
+            System.out.println(jdbcUserDao.findAll());
             req.getServletContext().getRequestDispatcher("/jsp/admin-home.jsp").forward(req, resp);
         }
         if (loginedUser.getRoleId() == 2) {
             req.getServletContext().getRequestDispatcher("/jsp/user-home.jsp").forward(req, resp);
         }
+
     }
 
     @Override

@@ -5,24 +5,40 @@ import java.util.List;
 
 public class AvailableUrl {
 
-    private List<String> url;
+    private List<String> allUrl;
+    private List<String> urlForUser;
+    private List<String> urlForGuest;
 
-    public List<String> getUrl() {
-        return url;
+    public List<String> getAllUrl() {
+        return allUrl;
     }
 
-    public void setUrl(List<String> url) {
-        this.url = url;
+    public List<String> getUrlForUser() {
+        return urlForUser;
+    }
+
+    public List<String> getUrlForGuest() {
+        return urlForGuest;
     }
 
     {
-        url = new ArrayList<>();
-        url.add("/");
-        url.add("/home");
-        url.add("/add");
-        url.add("/edit");
-        url.add("/login");
-        url.add("/delete");
+        allUrl = new ArrayList<>();
+        allUrl.add("/");
+        allUrl.add("/home");
+        allUrl.add("/add");
+        allUrl.add("/edit");
+        allUrl.add("/login");
+        allUrl.add("/delete");
+
+        urlForUser = new ArrayList<>();
+        urlForUser.add("/");
+        urlForUser.add("/home");
+        urlForUser.add("/login");
+
+        urlForGuest = new ArrayList<>();
+        urlForGuest.add("/");
+        urlForGuest.add("/login");
+
     }
 
 
