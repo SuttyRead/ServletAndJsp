@@ -1,7 +1,6 @@
 package com.ua.sutty.repository.impl;
 
 import com.ua.sutty.domain.User;
-import com.ua.sutty.form.UserForm;
 import com.ua.sutty.repository.AbstractJdbcDao;
 import com.ua.sutty.repository.UserDao;
 import org.apache.commons.dbcp2.BasicDataSource;
@@ -293,41 +292,6 @@ public class JdbcUserDao extends AbstractJdbcDao implements UserDao {
             closeConnection(connection);
         }
         return user;
-    }
-
-    @Override
-    public UserForm findByLoginWithoutExcessParam(String login) {
-        if (login == null) {
-            LOGGER.error("Login == null", new NullPointerException());
-            throw new NullPointerException();
-        }
-        UserForm userForm = new UserForm();
-        Connection connection = null;
-        PreparedStatement pst = null;
-        ResultSet rs = null;
-
-        try {
-            connection = createConnection();
-            pst = connection.prepareStatement(GET_USER_BY_LOGIN);
-            pst.setString(1, login);
-            rs = pst.executeQuery();
-            while (rs.next()) {
-                userForm.setLogin(rs.getString(User.LOGIN));
-                userForm.setPassword(rs.getString(User.PASSWORD));
-                userForm.setRoleId(rs.getLong(User.ROLE_ID));
-            }
-            connection.commit();
-            LOGGER.trace("Find user by login");
-        } catch (SQLException e) {
-            LOGGER.error("Error in time execute query", e);
-            rollBackTransactional(connection);
-            throw new RuntimeException(e);
-        } finally {
-            closeResultSet(rs);
-            closePreparedStatement(pst);
-            closeConnection(connection);
-        }
-        return userForm;
     }
 
     private synchronized void rollBackTransactional(Connection connection) {

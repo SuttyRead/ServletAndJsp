@@ -15,9 +15,11 @@
             <li class="nav-item">
                 <a class="nav-link" href="/home">Home</a>
             </li>
-            <li class="nav-item">
-                <a class="nav-link" href="/login">Login</a>
-            </li>
+            <c:if test="${loggedInUser == null}">
+                <li class="nav-item">
+                    <a class="nav-link" href="/login">Login</a>
+                </li>
+            </c:if>
         </ul>
         <div class="navbar-text mr-3">${name}</div>
         <c:if test="${loggedInUser != null}">
