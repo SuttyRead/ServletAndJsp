@@ -9,6 +9,6 @@
 <%@ include file = "header.jsp" %>
 
 Hello, User! <br>
-Click here to <a href="#">logout</a>
+Click here to <a href="/logout">logout</a>
 </body>
 </html>

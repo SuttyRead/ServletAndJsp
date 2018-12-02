@@ -45,43 +45,18 @@ public class EditServlet extends HttpServlet {
         String login = req.getParameter("login");
         String password = req.getParameter("password");
         String confirmPassword = req.getParameter("confirmPassword");
+        String email = req.getParameter("email");
+        String firstName = req.getParameter("firstName");
+        String lastName = req.getParameter("lastName");
+        String birthday = req.getParameter("birthday");
+        String role = req.getParameter("role");
+
         if (!password.equals(confirmPassword)) {
             req.getSession().setAttribute("passwordNotEquals", true);
             resp.sendRedirect("/edit?userId=" + id);
             return;
         }
-        String email = req.getParameter("email");
-        Pattern pattern = Pattern.compile("\\w+([\\.-]?\\w+)*@\\w+([\\.-]?\\w+)*\\.\\w{2,4}");
-        Matcher matcher = pattern.matcher(email);
-        if (!matcher.matches()) {
-            req.getSession().setAttribute("emailNotPattern", true);
-            resp.sendRedirect("/add");
-            return;
-        }
-        String firstName = req.getParameter("firstName");
-        String lastName = req.getParameter("lastName");
-        String birthday = req.getParameter("birthday");
-        pattern = Pattern.compile("(?=^.{8,}$)((?=.*\\d)|(?=.*\\W+))(?![.\\n])(?=.*[A-Z])(?=.*[a-z]).*$");
-        matcher = pattern.matcher(password);
-        if (!matcher.matches()) {
-            req.getSession().setAttribute("passwordNotPattern", true);
-            resp.sendRedirect("/edit?userId=" + id);
-            return;
-        }
-        pattern = Pattern.compile("^[A-Z]{1}[a-z]{1,25}");
-        matcher = pattern.matcher(firstName);
-        if (!matcher.matches()){
-            req.getSession().setAttribute("firstNameNotPattern", true);
-            resp.sendRedirect("/add");
-            return;
-        }
-        pattern = Pattern.compile("^[A-Z]{1}[a-z]{1,25}");
-        matcher = pattern.matcher(lastName);
-        if (!matcher.matches()){
-            req.getSession().setAttribute("lastNameNotPattern", true);
-            resp.sendRedirect("/add");
-            return;
-        }
+
         LocalDate localDate = Date.valueOf(birthday).toLocalDate();
         LocalDate now = LocalDate.now();
         if (localDate.isAfter(now)) {
@@ -89,7 +64,41 @@ public class EditServlet extends HttpServlet {
             resp.sendRedirect("/edit?userId=" + id);
             return;
         }
-        String role = req.getParameter("role");
+
+        Pattern pattern = Pattern.compile("\\w+([\\.-]?\\w+)*@\\w+([\\.-]?\\w+)*\\.\\w{2,4}");
+        Matcher matcher = pattern.matcher(email);
+        if (!matcher.matches()) {
+            req.getSession().setAttribute("emailNotPattern", true);
+            resp.sendRedirect("/edit?userId=" + id);
+            return;
+        }
+
+        pattern = Pattern.compile("(?=^.{8,}$)((?=.*\\d)|(?=.*\\W+))(?![.\\n])(?=.*[A-Z])(?=.*[a-z]).*$");
+        matcher = pattern.matcher(password);
+        if (!matcher.matches()) {
+            req.getSession().setAttribute("passwordNotPattern", true);
+            resp.sendRedirect("/edit?userId=" + id);
+            return;
+        }
+
+        pattern = Pattern.compile("^[A-Z]{1}[a-z]{1,25}");
+        matcher = pattern.matcher(firstName);
+        if (!matcher.matches()){
+            req.getSession().setAttribute("firstNameNotPattern", true);
+            resp.sendRedirect("/edit?userId=" + id);
+            return;
+        }
+
+        pattern = Pattern.compile("^[A-Z]{1}[a-z]{1,25}");
+        matcher = pattern.matcher(lastName);
+        if (!matcher.matches()){
+            req.getSession().setAttribute("lastNameNotPattern", true);
+            resp.sendRedirect("/edit?userId=" + id);
+            return;
+        }
+
+
+
         User user = new User(Long.valueOf(id), login, password, email, firstName, lastName, Date.valueOf(birthday), Long.valueOf(role));
         JdbcUserDao jdbcUserDao = new JdbcUserDao(new DataSource().getBasicDataSourceTest());
         jdbcUserDao.update(user);

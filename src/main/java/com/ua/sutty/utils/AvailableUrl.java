@@ -29,11 +29,13 @@ public class AvailableUrl {
         allUrl.add("/edit");
         allUrl.add("/login");
         allUrl.add("/delete");
+        allUrl.add("/logout");
 
         urlForUser = new ArrayList<>();
         urlForUser.add("/");
         urlForUser.add("/home");
         urlForUser.add("/login");
+        urlForUser.add("/logout");
 
         urlForGuest = new ArrayList<>();
         urlForGuest.add("/");

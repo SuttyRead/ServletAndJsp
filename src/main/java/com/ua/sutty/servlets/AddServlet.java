@@ -36,67 +36,72 @@ public class AddServlet extends HttpServlet {
         String login = req.getParameter("login");
         String password = req.getParameter("password");
         String confirmPassword = req.getParameter("confirmPassword");
-        if (!password.equals(confirmPassword)){
-            req.getSession().setAttribute("passwordNotEquals", true);
-            resp.sendRedirect("/add");
-            return;
-        }
         String email = req.getParameter("email");
-        Pattern pattern = Pattern.compile("\\w+([\\.-]?\\w+)*@\\w+([\\.-]?\\w+)*\\.\\w{2,4}");
-        Matcher matcher = pattern.matcher(email);
-        if (!matcher.matches()){
-            req.getSession().setAttribute("emailNotPattern", true);
-            resp.sendRedirect("/add");
-            return;
-        }
         String firstName = req.getParameter("firstName");
         String lastName = req.getParameter("lastName");
         String birthday = req.getParameter("birthday");
+        String role = req.getParameter("role");
 
-        pattern = Pattern.compile("^[a-zA-Z][a-zA-Z0-9-_\\.]{1,20}$");
-        matcher = pattern.matcher(login);
-        if (!matcher.matches()){
+        Pattern pattern = Pattern.compile("^[a-zA-Z][a-zA-Z0-9-_\\.]{1,20}$");
+        Matcher matcher = pattern.matcher(login);
+        if (!matcher.matches()) {
             req.getSession().setAttribute("loginNotPattern", true);
-            resp.sendRedirect("/add");
-            return;
-        }
-        pattern = Pattern.compile("^[A-Z]{1}[a-z]{1,25}");
-        matcher = pattern.matcher(firstName);
-        if (!matcher.matches()){
-            req.getSession().setAttribute("firstNameNotPattern", true);
-            resp.sendRedirect("/add");
-            return;
-        }
-        pattern = Pattern.compile("^[A-Z]{1}[a-z]{1,25}");
-        matcher = pattern.matcher(lastName);
-        if (!matcher.matches()){
-            req.getSession().setAttribute("lastNameNotPattern", true);
             resp.sendRedirect("/add");
             return;
         }
 
         pattern = Pattern.compile("(?=^.{8,}$)((?=.*\\d)|(?=.*\\W+))(?![.\\n])(?=.*[A-Z])(?=.*[a-z]).*$");
         matcher = pattern.matcher(password);
-        if (!matcher.matches()){
+        if (!matcher.matches()) {
             req.getSession().setAttribute("passwordNotPattern", true);
             resp.sendRedirect("/add");
             return;
         }
+
+        if (!password.equals(confirmPassword)) {
+            req.getSession().setAttribute("passwordNotEquals", true);
+            resp.sendRedirect("/add");
+            return;
+        }
+
+        pattern = Pattern.compile("\\w+([\\.-]?\\w+)*@\\w+([\\.-]?\\w+)*\\.\\w{2,4}");
+        matcher = pattern.matcher(email);
+        if (!matcher.matches()) {
+            req.getSession().setAttribute("emailNotPattern", true);
+            resp.sendRedirect("/add");
+            return;
+        }
+
+        pattern = Pattern.compile("^[A-Z]{1}[a-z]{1,25}");
+        matcher = pattern.matcher(firstName);
+        if (!matcher.matches()) {
+            req.getSession().setAttribute("firstNameNotPattern", true);
+            resp.sendRedirect("/add");
+            return;
+        }
+
+        pattern = Pattern.compile("^[A-Z]{1}[a-z]{1,25}");
+        matcher = pattern.matcher(lastName);
+        if (!matcher.matches()) {
+            req.getSession().setAttribute("lastNameNotPattern", true);
+            resp.sendRedirect("/add");
+            return;
+        }
+
         LocalDate localDate = Date.valueOf(birthday).toLocalDate();
         LocalDate now = LocalDate.now();
-        if (localDate.isAfter(now)){
+        if (localDate.isAfter(now)) {
             req.getSession().setAttribute("incorrectDate", true);
             resp.sendRedirect("/add");
             return;
         }
-        String role = req.getParameter("role");
 
         JdbcUserDao jdbcUserDao = new JdbcUserDao(new DataSource().getBasicDataSourceTest());
-        if (jdbcUserDao.findByLogin(login).getLogin() != null){
+        if (jdbcUserDao.findByLogin(login).getLogin() != null) {
             req.setAttribute("existLogin", true);
             req.getServletContext().getRequestDispatcher("/jsp/add.jsp").forward(req, resp);
             return;
-        }else {
+        } else {
             req.getSession().removeAttribute("existLogin");
         }
         User user = new User(login, password, email, firstName, lastName, Date.valueOf(birthday), Long.valueOf(role));

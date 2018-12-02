@@ -1,4 +1,4 @@
-<%@ taglib prefix = "c" uri = "http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -8,9 +8,7 @@
 </head>
 <body>
 
-<%@ include file = "header.jsp" %>
-
-
+<%@ include file="header.jsp" %>
 
 <h1>Edit User</h1>
 <form method="post" class="form-horizontal" action="/edit">
@@ -30,12 +28,6 @@
                     name="login"
                     value="${someUser.login}">
         </div>
-
-        <div class="col-sm-offset-3 col-sm-6 err-message">
-            <c:if test="${loginMessage != null}">
-                <c:out value="${loginMessage}"/>
-            </c:if>
-        </div>
     </div>
 
     <div class="form-group">
@@ -44,7 +36,10 @@
         <div class="col-sm-6">
             <input type="password" class="form-control" id="password"
                    placeholder="Enter password" name="password"
-                   value="${someUser.password}">
+                   value="${someUser.password}" aria-describedby="passwordHelpInline" required>
+            <small id="passwordHelpInline" class="text-muted">
+                Lowercase and uppercase Latin letters, numbers, special characters. Minimum 8 characters
+            </small>
         </div>
         <div class="col-sm-offset-3 col-sm-6 err-message">
             <c:if test="${passwordNotEquals != null}">
@@ -56,14 +51,14 @@
                 <c:if test="${passwordNotPattern != null}">
                     <div class="alert alert-danger" role="alert">
                         This login doesn't match pattern
-                        (?=^.{8,}$)((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$
+                        ^[a-zA-Z][a-zA-Z0-9-_\.]{1,20}$.
                         Lowercase and uppercase Latin letters, numbers, special characters. Minimum 8 characters
+                        For example SuttyRead007
                     </div>
                 </c:if>
             </div>
         </div>
     </div>
-
 
 
     <div class="form-group">
@@ -73,11 +68,6 @@
             <input type="password" class="form-control" id="confirmPassword"
                    placeholder="Confirm password" name="confirmPassword" value="${someUser.password}">
         </div>
-        <div class="col-sm-offset-3 col-sm-6 err-message">
-            <c:if test="${confirmPasswordMessage != null}">
-                <c:out value="${confirmPasswordMessage}"/>
-            </c:if>
-        </div>
     </div>
 
     <div class="form-group">
@@ -86,13 +76,14 @@
         <div class="col-sm-6">
             <input type="text" class="form-control" id="email"
                    placeholder="Enter email" name="email"
-                   value="${someUser.email}">
+                   value="${someUser.email}" aria-describedby=emailHelpInline" required>
         </div>
         <div class="col-sm-offset-3 col-sm-6 err-message">
             <c:if test="${emailNotPattern != null}">
                 <div class="alert alert-danger" role="alert">
                     This email doesn't match pattern
                     \w+([\.-]?\w+)*@\w+([\.-]?\w+)*\.\w{2,4}
+                    For example SuttyRead@gmail.com
                 </div>
             </c:if>
         </div>
@@ -104,11 +95,18 @@
         <div class="col-sm-6">
             <input type="text" class="form-control" id="First Name"
                    placeholder="Enter first name" name="firstName"
-                   value="${someUser.firstName}">
+                   value="${someUser.firstName}" aria-describedby=firstNameHelpInline" required>
+            <small id="firstNameHelpInline" class="text-muted">
+                The first letter must be uppercase For example Sutty
+            </small>
         </div>
         <div class="col-sm-offset-3 col-sm-6 err-message">
-            <c:if test="${firstNameMessage != null}">
-                <c:out value="${firstNameMessage}"/>
+            <c:if test="${firstNameNotPattern != null}">
+                <div class="alert alert-danger" role="alert">
+                    This first name doesn't match pattern
+                    ^[A-Z]{1}[a-z]{1,25}
+                    For example Sutty
+                </div>
             </c:if>
         </div>
 
@@ -119,11 +117,18 @@
         <div class="col-sm-6">
             <input type="text" class="form-control" id="Last Name"
                    placeholder="Enter last name" name="lastName"
-                   value="${someUser.lastName}">
+                   value="${someUser.lastName}" aria-describedby=lastNameHelpInline" required>
+            <small id="lastNameHelpInline" class="text-muted">
+                The first letter must be uppercase For example Read
+            </small>
         </div>
         <div class="col-sm-offset-3 col-sm-6 err-message">
-            <c:if test="${lastNameMessage != null}">
-                <c:out value="${lastNameMessage}"/>
+            <c:if test="${lastNameNotPattern != null}">
+                <div class="alert alert-danger" role="alert">
+                    This last name doesn't match pattern
+                    ^[A-Z]{1}[a-z]{1,25}
+                    For example Read
+                </div>
             </c:if>
         </div>
     </div>
@@ -139,6 +144,7 @@
             <c:if test="${incorrectDate != null}">
                 <div class="alert alert-danger" role="alert">
                     Incorrect birthday
+                    For example 1982-7-27
                 </div>
             </c:if>
         </div>
@@ -161,11 +167,6 @@
                 </c:choose>
             </select>
         </div>
-        <div class="col-sm-offset-3 col-sm-6 err-message">
-            <c:if test="${roleIdMessage != null}">
-                <c:out value="${roleIdMessage}"/>
-            </c:if>
-        </div>
     </div>
 
     <div class="form-group">
@@ -179,6 +180,7 @@
                aria-pressed="true">Cancel</a>
         </div>
     </div>
+
 </form>
 </body>
 </html>

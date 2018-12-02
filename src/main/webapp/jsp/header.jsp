@@ -18,16 +18,11 @@
             <li class="nav-item">
                 <a class="nav-link" href="/login">Login</a>
             </li>
-            <li class="nav-item">
-                <a class="nav-link" href="/users">User list</a>
-            </li>
         </ul>
-
         <div class="navbar-text mr-3">${name}</div>
         <c:if test="${loggedInUser != null}">
             ${userLogin},
             <a href="/logout"> Logout</a>
         </c:if>
-
     </div>
 </nav>
