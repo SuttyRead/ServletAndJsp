@@ -24,7 +24,7 @@
         </ul>
 
         <div class="navbar-text mr-3">${name}</div>
-        <c:if test="${loginedUser != null}">
+        <c:if test="${loggedInUser != null}">
             ${userLogin},
             <a href="/logout"> Logout</a>
         </c:if>

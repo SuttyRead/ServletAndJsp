@@ -1,6 +1,6 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ taglib uri="http://rborulchenko.com/tags" prefix="myTags" %>
+<%@ taglib uri="usersTag" prefix="myTags" %>
 <html>
 <head>
     <title>Title</title>
@@ -15,9 +15,25 @@ Hello, admin
 <a href="/add">Add new User</a>
 
 <div class="col-sm-offset-3 col-sm-6 err-message">
-    <c:if test="${successfullDelete == 1}">
+    <c:if test="${successfullyUpdated != null}">
+        <div class="alert alert-success" role="alert">
+            User was successfully update!
+        </div>
+    </c:if>
+</div>
+
+<div class="col-sm-offset-3 col-sm-6 err-message">
+    <c:if test="${successfullyDeleted != null}">
         <div class="alert alert-success" role="alert">
             User was successfully delete!
+        </div>
+    </c:if>
+</div>
+
+<div class="col-sm-offset-3 col-sm-6 err-message">
+    <c:if test="${errorDeleting != null}">
+        <div class="alert alert-danger" role="alert">
+            You cannot delete yourself
         </div>
     </c:if>
 </div>

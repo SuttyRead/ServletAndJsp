@@ -10,13 +10,7 @@
 
 <%@ include file = "header.jsp" %>
 
-<div class="col-sm-offset-3 col-sm-6 err-message">
-    <c:if test="${successfullUpdate == 1}">
-        <div class="alert alert-success" role="alert">
-            User was successfully update!
-        </div>
-    </c:if>
-</div>
+
 
 <h1>Edit User</h1>
 <form method="post" class="form-horizontal" action="/edit">
@@ -53,11 +47,24 @@
                    value="${someUser.password}">
         </div>
         <div class="col-sm-offset-3 col-sm-6 err-message">
-            <c:if test="${passwordMessage != null}">
-                <c:out value="${passwordMessage}"/>
+            <c:if test="${passwordNotEquals != null}">
+                <div class="alert alert-danger" role="alert">
+                    Password don't match!
+                </div>
             </c:if>
+            <div class="col-sm-offset-3 col-sm-6 err-message">
+                <c:if test="${passwordNotPattern != null}">
+                    <div class="alert alert-danger" role="alert">
+                        This login doesn't match pattern
+                        (?=^.{8,}$)((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$
+                        Lowercase and uppercase Latin letters, numbers, special characters. Minimum 8 characters
+                    </div>
+                </c:if>
+            </div>
         </div>
     </div>
+
+
 
     <div class="form-group">
         <label class="control-label col-sm-3"
@@ -82,8 +89,11 @@
                    value="${someUser.email}">
         </div>
         <div class="col-sm-offset-3 col-sm-6 err-message">
-            <c:if test="${emailMessage != null}">
-                <c:out value="${emailMessage}"/>
+            <c:if test="${emailNotPattern != null}">
+                <div class="alert alert-danger" role="alert">
+                    This email doesn't match pattern
+                    \w+([\.-]?\w+)*@\w+([\.-]?\w+)*\.\w{2,4}
+                </div>
             </c:if>
         </div>
     </div>
@@ -126,8 +136,10 @@
                    value="${someUser.birthday}">
         </div>
         <div class="col-sm-offset-3 col-sm-6 err-message">
-            <c:if test="${birthdayMessage != null}">
-                <c:out value="${birthdayMessage}"/>
+            <c:if test="${incorrectDate != null}">
+                <div class="alert alert-danger" role="alert">
+                    Incorrect birthday
+                </div>
             </c:if>
         </div>
     </div>
@@ -138,7 +150,7 @@
         <div class="col-sm-6">
             <select class="form-control" id="Role" name="role">
                 <c:choose>
-                    <c:when test="${someUser.roleId == 2}">
+                    <c:when test="${someUser.roleId == 1}">
                         <option value="1">Admin</option>
                         <option value="2">User</option>
                     </c:when>
@@ -161,7 +173,7 @@
             <button type="submit" class="btn btn-success">OK</button>
         </div>
         <div class="col-sm-1">
-            <a href="admin"
+            <a href="/home"
                class="btn btn-primary"
                role="button"
                aria-pressed="true">Cancel</a>

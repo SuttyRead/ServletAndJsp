@@ -1,6 +1,5 @@
 package com.ua.sutty.servlets;
 
-import com.ua.sutty.domain.Role;
 import com.ua.sutty.domain.User;
 import com.ua.sutty.repository.impl.JdbcUserDao;
 import com.ua.sutty.utils.DataSource;
@@ -10,10 +9,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 @WebServlet("/home")
 public class HomeServlet extends HttpServlet {
@@ -21,30 +17,24 @@ public class HomeServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
-        HttpSession session = req.getSession();
-        User loginedUser = (User) req.getSession().getAttribute("loginedUser");
-        System.out.println(loginedUser.getLogin());
-//        req.setAttribute("userLogin", loginedUser.getLogin());
-        if (loginedUser.getRoleId() == 1) {
+        User loggedInUser = (User) req.getSession().getAttribute("loggedInUser");
+        System.out.println(loggedInUser.getLogin());
+        if (loggedInUser.getRoleId() == 1) {
             JdbcUserDao jdbcUserDao = new JdbcUserDao(new DataSource().getBasicDataSourceTest());
-            List<Role> roles = new ArrayList<>();
-            Role role1 = new Role(1L, "ADMIN");
-            Role role2 = new Role(2L, "USER");
-            roles.add(role1);
-            roles.add(role2);
-            req.setAttribute("roles", roles);
             req.setAttribute("users", jdbcUserDao.findAll());
-            System.out.println(jdbcUserDao.findAll());
             req.getServletContext().getRequestDispatcher("/jsp/admin-home.jsp").forward(req, resp);
+            req.getSession().removeAttribute("successfullyDeleted");
+            req.getSession().removeAttribute("errorDeleting");
+            req.getSession().removeAttribute("successfullyUpdated");
         }
-        if (loginedUser.getRoleId() == 2) {
+        if (loggedInUser.getRoleId() == 2) {
             req.getServletContext().getRequestDispatcher("/jsp/user-home.jsp").forward(req, resp);
         }
-
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         doGet(req, resp);
     }
+
 }

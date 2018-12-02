@@ -19,9 +19,7 @@ public class AdminServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        User loginedUser = (User) req.getSession().getAttribute("loginedUser");
-//        req.setAttribute("userLogin", loginedUser.getLogin());
-        System.out.println(loginedUser);
+        User loginedUser = (User) req.getSession().getAttribute("loggedInUser");
         JdbcUserDao jdbcUserDao = new JdbcUserDao(new DataSource().getBasicDataSourceTest());
         List<Role> roles = new ArrayList<>();
         Role role1 = new Role(1L, "ADMIN");
@@ -30,8 +28,6 @@ public class AdminServlet extends HttpServlet {
         roles.add(role2);
         req.setAttribute("roles", roles);
         req.setAttribute("users", jdbcUserDao.findAll());
-//        PrintUsers printUsers = new PrintUsers();
-//        printUsers.setUsers(jdbcUserDao.findAll());
         System.out.println(jdbcUserDao.findAll());
         if (loginedUser.getRoleId() == 1){
             req.getServletContext().getRequestDispatcher("/jsp/admin-home.jsp").forward(req, resp);

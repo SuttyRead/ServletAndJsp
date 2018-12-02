@@ -11,6 +11,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.sql.Date;
+import java.time.LocalDate;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @WebServlet("/edit")
 public class EditServlet extends HttpServlet {
@@ -18,50 +21,79 @@ public class EditServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         JdbcUserDao jdbcUserDao = new JdbcUserDao(new DataSource().getBasicDataSourceTest());
-
         String id = req.getParameter("userId");
-
-        System.out.println("Don't have id" + id);
-        if (req.getParameter("successfulUpdate") == null || Integer.valueOf(req.getParameter("successfulUpdate")) != 1 ){
-            if (id == null) {
-                req.getServletContext().getRequestDispatcher("/jsp/errorPage.jsp").forward(req, resp);
-                return;
-            }
+        if (id == null) {
+            req.getServletContext().getRequestDispatcher("/jsp/errorPage.jsp").forward(req, resp);
+            return;
         }
-
         User someUser = jdbcUserDao.findById(Long.valueOf(id));
-        if (someUser.getLogin() == null){
+        if (someUser.getLogin() == null) {
             req.getServletContext().getRequestDispatcher("/jsp/errorPage.jsp").forward(req, resp);
         }
         req.getSession().setAttribute("someUser", someUser);
         req.getServletContext().getRequestDispatcher("/jsp/edit.jsp").forward(req, resp);
-//        doPost(req, resp);
+        req.getSession().removeAttribute("passwordNotEquals");
+        req.getSession().removeAttribute("incorrectDate");
+        req.getSession().removeAttribute("emailNotPattern");
+        req.getSession().removeAttribute("firstNameNotPattern");
+        req.getSession().removeAttribute("lastNameNotPattern");
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        req.setAttribute("successfullUpdate", 2);
         String id = req.getParameter("id");
         String login = req.getParameter("login");
         String password = req.getParameter("password");
         String confirmPassword = req.getParameter("confirmPassword");
+        if (!password.equals(confirmPassword)) {
+            req.getSession().setAttribute("passwordNotEquals", true);
+            resp.sendRedirect("/edit?userId=" + id);
+            return;
+        }
         String email = req.getParameter("email");
+        Pattern pattern = Pattern.compile("\\w+([\\.-]?\\w+)*@\\w+([\\.-]?\\w+)*\\.\\w{2,4}");
+        Matcher matcher = pattern.matcher(email);
+        if (!matcher.matches()) {
+            req.getSession().setAttribute("emailNotPattern", true);
+            resp.sendRedirect("/add");
+            return;
+        }
         String firstName = req.getParameter("firstName");
         String lastName = req.getParameter("lastName");
         String birthday = req.getParameter("birthday");
+        pattern = Pattern.compile("(?=^.{8,}$)((?=.*\\d)|(?=.*\\W+))(?![.\\n])(?=.*[A-Z])(?=.*[a-z]).*$");
+        matcher = pattern.matcher(password);
+        if (!matcher.matches()) {
+            req.getSession().setAttribute("passwordNotPattern", true);
+            resp.sendRedirect("/edit?userId=" + id);
+            return;
+        }
+        pattern = Pattern.compile("^[A-Z]{1}[a-z]{1,25}");
+        matcher = pattern.matcher(firstName);
+        if (!matcher.matches()){
+            req.getSession().setAttribute("firstNameNotPattern", true);
+            resp.sendRedirect("/add");
+            return;
+        }
+        pattern = Pattern.compile("^[A-Z]{1}[a-z]{1,25}");
+        matcher = pattern.matcher(lastName);
+        if (!matcher.matches()){
+            req.getSession().setAttribute("lastNameNotPattern", true);
+            resp.sendRedirect("/add");
+            return;
+        }
+        LocalDate localDate = Date.valueOf(birthday).toLocalDate();
+        LocalDate now = LocalDate.now();
+        if (localDate.isAfter(now)) {
+            req.getSession().setAttribute("incorrectDate", true);
+            resp.sendRedirect("/edit?userId=" + id);
+            return;
+        }
         String role = req.getParameter("role");
         User user = new User(Long.valueOf(id), login, password, email, firstName, lastName, Date.valueOf(birthday), Long.valueOf(role));
         JdbcUserDao jdbcUserDao = new JdbcUserDao(new DataSource().getBasicDataSourceTest());
         jdbcUserDao.update(user);
-        req.setAttribute("someUser", user);
-        req.setAttribute("successfullUpdate", 1);
-        System.out.println("Succ");
-        req.getServletContext().getRequestDispatcher("/jsp/edit.jsp").forward(req, resp);
-
-//        String id = req.getParameter("id");
-//        User someUser = jdbcUserDao.findById(Long.valueOf(id));
-//        req.getSession().setAttribute("someUser", someUser);
-//        req.getServletContext().getRequestDispatcher("/jsp/edit.jsp").forward(req, resp);
-
+        req.getSession().setAttribute("successfullyUpdated", true);
+        resp.sendRedirect("/home");
     }
 }

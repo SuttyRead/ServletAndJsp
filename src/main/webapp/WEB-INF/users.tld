@@ -8,11 +8,11 @@
     <tlib-version>1.0</tlib-version>
     <jsp-version>1.2</jsp-version>
     <short-name>simple</short-name>
-    <uri>http://rborulchenko.com/tags</uri>
+    <uri>usersTag</uri>
 
     <tag>
         <name>printTable</name>
-        <tag-class>com.ua.sutty.tag.TablePrinterTag</tag-class>
+        <tag-class>com.ua.sutty.tag.UserTag</tag-class>
         <body-content>scriptless</body-content>
 
         <attribute>
