@@ -32,9 +32,13 @@ public class SecurityFilter implements Filter {
         User user = (User) request.getSession().getAttribute("loggedInUser");
 
         if (!allUrl.contains(servletPath)) {
+            if (user != null){
+                request.setAttribute("userLogin", user.getLogin());
+            }
             request.getServletContext().getRequestDispatcher("/jsp/errorPage.jsp").forward(request, response);
             return;
         }
+
         if (user == null) {
             if (!urlForGuest.contains(servletPath)) {
                 response.sendRedirect("/login");
@@ -57,6 +61,9 @@ public class SecurityFilter implements Filter {
                 }
             }
         }
+
+
+
     }
 
     @Override

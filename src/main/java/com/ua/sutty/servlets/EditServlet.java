@@ -33,6 +33,7 @@ public class EditServlet extends HttpServlet {
         req.getSession().setAttribute("someUser", someUser);
         req.getServletContext().getRequestDispatcher("/jsp/edit.jsp").forward(req, resp);
         req.getSession().removeAttribute("passwordNotEquals");
+        req.getSession().removeAttribute("passwordNotPattern");
         req.getSession().removeAttribute("incorrectDate");
         req.getSession().removeAttribute("emailNotPattern");
         req.getSession().removeAttribute("firstNameNotPattern");
