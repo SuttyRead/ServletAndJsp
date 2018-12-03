@@ -169,7 +169,7 @@ public class JdbcRoleDao extends AbstractJdbcDao implements RoleDao {
             connection.rollback();
         } catch (SQLException e1) {
             LOGGER.error("Error in time call rollback", e1);
-            e1.printStackTrace();
+            throw new RuntimeException(e1);
         }
     }
 

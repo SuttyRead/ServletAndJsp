@@ -1,10 +1,16 @@
 package com.ua.sutty.utils;
 
 import org.apache.commons.dbcp2.BasicDataSource;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ResourceBundle;
 
 public class DataSource {
+
+    private final Logger LOGGER = LoggerFactory
+            .getLogger(DataSource.class.getName());
+
     private BasicDataSource basicDataSource;
     private BasicDataSource basicDataSourceTest;
 
@@ -23,7 +29,8 @@ public class DataSource {
             basicDataSourceTest.setPassword(resourceBundleTest.getString("jdbc.password"));
             Class.forName(resourceBundle.getString("jdbc.driver")).newInstance();
         } catch (IllegalAccessException | InstantiationException | ClassNotFoundException e) {
-            e.printStackTrace();
+            LOGGER.error("Error in time load dataSource");
+            throw new RuntimeException(e);
         }
     }
 

@@ -1,6 +1,5 @@
 package com.ua.sutty.repository;
 
-
 import com.ua.sutty.domain.User;
 
 import java.util.List;

@@ -18,7 +18,6 @@ public class HomeServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
         User loggedInUser = (User) req.getSession().getAttribute("loggedInUser");
-        System.out.println(loggedInUser.getLogin());
         if (loggedInUser.getRoleId() == 1) {
             JdbcUserDao jdbcUserDao = new JdbcUserDao(new DataSource().getBasicDataSourceTest());
             req.setAttribute("users", jdbcUserDao.findAll());

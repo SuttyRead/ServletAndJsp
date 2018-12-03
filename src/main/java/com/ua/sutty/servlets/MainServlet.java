@@ -1,8 +1,5 @@
 package com.ua.sutty.servlets;
 
-import com.ua.sutty.domain.User;
-import com.ua.sutty.utils.LoadProperties;
-
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;

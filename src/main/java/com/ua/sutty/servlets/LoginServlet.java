@@ -33,7 +33,6 @@ public class LoginServlet extends HttpServlet {
         if (user.getLogin() == null) {
             req.setAttribute("errorMessage", true);
             doGet(req, resp);
-//            resp.sendRedirect("/login");
             return;
         }
         if (user.getPassword().equals(password)) {

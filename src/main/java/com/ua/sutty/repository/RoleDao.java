@@ -1,6 +1,5 @@
 package com.ua.sutty.repository;
 
-
 import com.ua.sutty.domain.Role;
 
 public interface RoleDao {
